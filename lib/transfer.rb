@@ -13,16 +13,14 @@ class Transfer
   end
 
   def valid?
-    
+    self.sender.valid? && self.receiver.valid?
   end
 
-
-  def bank_accounts
-    BankAccount.all.select do |accounts|
-      accounts.name == self
+  def execute_transaction
+    if sender.balance >= transfer.amount
+      receiver.balance += sender.amount
     end
   end
 
-binding.pry
-"something"
+# binding.pry
 end
