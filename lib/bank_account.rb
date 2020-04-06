@@ -1,6 +1,7 @@
 require 'pry'
 
 class BankAccount
+
     attr_reader :name
     attr_accessor :balance, :status
 
@@ -10,8 +11,8 @@ class BankAccount
         @status = "open"
     end
 
-    def deposit(money_deposited)
-        @balance += money_deposited
+    def deposit(amount)
+        @balance += amount
     end
 
     def display_balance
@@ -19,18 +20,11 @@ class BankAccount
     end
 
     def valid?
-        if @status == "open" && @balance > 0
-            true
-        else
-            false
-        end
+        self.status == "open" && self.balance > 0
     end
 
     def close_account
-        if self.valid?
-            @status = "closed"
-        end
-
+        self.status = "closed"
     end
 end
 

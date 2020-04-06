@@ -2,27 +2,36 @@ require 'pry'
 
 class Transfer
   # your code here
-  attr_reader :sender, :receiver
-  attr_accessor :status, :amount
+
+  attr_accessor :sender, :receiver, :status, :amount
 
   def initialize(sender, receiver, amount)
     @sender = sender
     @receiver = receiver
-    @amount  = amount
     @status = "pending"
+    @amount = amount
   end
 
   def valid?
-    self.sender.valid? && self.receiver.valid?
+    sender.valid? && receiver.valid?
   end
 
   def execute_transaction
-    if self.sender.balance >= self.amount && self.status != "complete"
-      self.receiver.balance += self.amount
-      self.sender.balance -= self.amount
+    if valid? && sender.balance >= amount && self.status == "pending"
+      sender.balance -= self.amount
+      receiver.balance += self.amount
       self.status = "complete"
-    elsif self.sender.balance <= self.amount
-      self.status = "Transaction rejected. Please check your account balance."
+    else
+      self.status = "rejected"
+      "Transaction rejected. Please check your account balance."
+    end
+  end
+
+  def reverse_transfer
+    if valid? && self.status == "complete"
+      receiver.balance -= amount
+      sender.balance += amount
+      self.status = "reversed"
     end
   end
 
